@@ -1,23 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: ClusterTask
 metadata:
-  annotations:
-    manifestival: new
-    tekton.dev/displayName: s2i java
-    tekton.dev/pipelines.minVersion: "0.19"
-    tekton.dev/tags: s2i, java, workspace
-  labels:
-    app.kubernetes.io/version: "0.1"
-    operator.tekton.dev/operand-name: openshift-pipelines-addons
-    operator.tekton.dev/provider-type: redhat
   name: s2i-java-workshop
-  ownerReferences:
-  - apiVersion: operator.tekton.dev/v1alpha1
-    blockOwnerDeletion: true
-    controller: true
-    kind: TektonInstallerSet
-    name: addon-clustertasks-ft7s4
-    uid: 4f592b7f-7a4c-4735-bf7e-55b9921f1e34
 spec:
   description: s2i-java task clones a Git repository and builds and pushes a container
     image using S2I and a Java builder image.
