@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: workshop
     operator.tekton.dev/operand-name: openshift-pipelines-addons
     pipeline.openshift.io/runtime: java
-    pipeline.openshift.io/runtime-version: openjdk-17-ubi8
+    pipeline.openshift.io/runtime-version: openjdk-11-el7
     pipeline.openshift.io/type: kubernetes
   name: workshop
   namespace: workshop-int
@@ -15,18 +15,19 @@ spec:
   - default: workshop
     name: APP_NAME
     type: string
-  - default: https://github.com/devsecops-workshop/quarkus-build-options.git
+  - default: https://repository-git.apps.DOMAIN/gitea/quarkus-build-options.git
     name: GIT_REPO
     type: string
-  - name: GIT_REVISION
+  - default: master
+    name: GIT_REVISION
     type: string
-  - default: quay-quay-quay.apps.<DOMAIN>/openshift_workshop-int/workshop
+  - default: quay-quay-quay.apps.DOMAIN/openshift_workshop-int/workshop
     name: IMAGE_NAME
     type: string
   - default: .
     name: PATH_CONTEXT
     type: string
-  - default: openjdk-17-ubi8
+  - default: openjdk-11-el7
     name: VERSION
     type: string
   - default: workshop
@@ -35,7 +36,7 @@ spec:
   - default: latest
     name: IMAGESTREAMTAG
     type: string
-  - default: quay-quay-quay.apps.cluster-2mb4j.2mb4j.sandbox411.opentlc.com
+  - default: quay-quay-quay.apps.DOMAIN
     name: QUAY_URL
     type: string
   tasks:
