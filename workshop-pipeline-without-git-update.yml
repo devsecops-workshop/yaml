@@ -85,26 +85,5 @@ spec:
     taskRef:
       kind: ClusterTask
       name: openshift-client
-  - name: skopeo-copy
-    params:
-    - name: srcImageURL
-      value: docker://$(params.QUAY_URL)/openshift_workshop-int/workshop:latest
-    - name: destImageURL
-      value: docker://$(params.QUAY_URL)/openshift_workshop-prod/workshop:latest
-    - name: srcTLSverify
-      value: "false"
-    - name: destTLSverify
-      value: "false"
-    runAfter:
-    - build
-    taskRef:
-      kind: ClusterTask
-      name: skopeo-copy
-    workspaces:
-    - name: images-url
-      workspace: workspace
-    workspaces:
-    - name: workspace
-      workspace: workspace
   workspaces:
   - name: workspace
