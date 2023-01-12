@@ -53,7 +53,6 @@ spec:
   results:
   - description: Digest of the image just built.
     name: IMAGE_DIGEST
-    type: string
   steps:
   - args:
     - |-
