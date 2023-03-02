@@ -117,6 +117,10 @@ spec:
         docker://$(params.IMAGE)
 
       cat $(workspaces.source.path)/image-digest | tee /tekton/results/IMAGE_DIGEST
+    securityContext:
+      capabilities:
+        add:
+          - SETFCAP
     volumeMounts:
     - mountPath: /var/lib/containers
       name: varlibcontainers
