@@ -1,0 +1,115 @@
+apiVersion: tekton.dev/v1beta1
+kind: ClusterTask
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"tekton.dev/v1beta1","kind":"ClusterTask","metadata":{"annotations":{"tekton.dev/categories":"CLI","tekton.dev/displayName":"skopeo
+      copy","tekton.dev/pipelines.minVersion":"0.12.1","tekton.dev/platforms":"linux/amd64,linux/s390x,linux/ppc64le,linux/arm64","tekton.dev/tags":"cli"},"labels":{"app.kubernetes.io/version":"0.1","operator.tekton.dev/provider-type":"redhat"},"name":"skopeo-copy","namespace":"openshift-pipelines","ownerReferences":[{"apiVersion":"operator.tekton.dev/v1alpha1","blockOwnerDeletion":true,"controller":true,"kind":"TektonInstallerSet","name":"addon-clustertasks-q6wn9","uid":"76a528e5-d39c-427f-9970-b44b705d841b"}]},"spec":{"description":"Skopeo
+      is a command line tool for working with remote image registries.\nSkopeo
+      doesn’t require a daemon to be running while performing its operations. In
+      particular, the handy skopeo command called copy will ease the whole image
+      copy operation. The copy command will take care of copying the image from
+      internal.registry to production.registry. If your production registry
+      requires credentials to login in order to push the image, skopeo can
+      handle that as well.","params":[{"default":"","description":"URL of the
+      image to be copied to the destination
+      registry","name":"srcImageURL","type":"string"},{"default":"","description":"URL
+      of the image where the image from source should be copied
+      to","name":"destImageURL","type":"string"},{"default":"true","description":"Verify
+      the TLS on the src registry
+      endpoint","name":"srcTLSverify","type":"string"},{"default":"true","description":"Verify
+      the TLS on the dest registry
+      endpoint","name":"destTLSverify","type":"string"}],"steps":[{"image":"registry.redhat.io/rhel8/skopeo@sha256:6d20ab55415a1a0ca198ffa3be2dac82d19526ab3a290fa2fa5c8d2c5d2eefd0","name":"skopeo-copy","script":"#
+      Function to copy multiple images.\n#\ncopyimages() {\n 
+      filename='$(workspaces.images-url.path)/url.txt'\n  while IFS= read line
+      || [ -n \"$line\" ]\n  do\n    cmd=\"\"\n    for url in $line\n   
+      do\n      # echo $url\n      cmd=\"$cmd \\\n          $url\"\n   
+      done\n    skopeo copy $cmd --src-tls-verify=$(params.srcTLSverify)
+      --dest-tls-verify=$(params.destTLSverify)\n    echo $cmd\n  done \u003c
+      \"$filename\"\n}\n#\n# If single image is to be copied then, it can be
+      passed through\n# params in the taskrun.\nif [ \"$(params.srcImageURL)\"
+      != \"\" ] \u0026\u0026 [ \"$(params.destImageURL)\" != \"\" ] ; then\n 
+      skopeo copy \"$(params.srcImageURL)\" \"$(params.destImageURL)\"
+      --src-tls-verify=$(params.srcTLSverify)
+      --dest-tls-verify=$(params.destTLSverify)\nelse\n  # If file is provided
+      as a configmap in the workspace then multiple images can be copied.\n 
+      #\n  copyimages\nfi\n"}],"workspaces":[{"name":"images-url"}]}}
+    tekton.dev/categories: CLI
+    tekton.dev/displayName: skopeo copy updated
+    tekton.dev/pipelines.minVersion: 0.12.1
+    tekton.dev/platforms: 'linux/amd64,linux/s390x,linux/ppc64le,linux/arm64'
+    tekton.dev/tags: cli
+  labels:
+    app.kubernetes.io/version: '0.1'
+    operator.tekton.dev/provider-type: redhat
+  name: skopeo-copy-updated  
+spec:
+  description: >-
+    Skopeo is a command line tool for working with remote image registries.
+
+    Skopeo doesn’t require a daemon to be running while performing its
+    operations. In particular, the handy skopeo command called copy will ease
+    the whole image copy operation. The copy command will take care of copying
+    the image from internal.registry to production.registry. If your production
+    registry requires credentials to login in order to push the image, skopeo
+    can handle that as well.
+  params:
+    - default: ''
+      description: URL of the image to be copied to the destination registry
+      name: srcImageURL
+      type: string
+    - default: ''
+      description: URL of the image where the image from source should be copied to
+      name: destImageURL
+      type: string
+    - default: 'true'
+      description: Verify the TLS on the src registry endpoint
+      name: srcTLSverify
+      type: string
+    - default: 'true'
+      description: Verify the TLS on the dest registry endpoint
+      name: destTLSverify
+      type: string
+  steps:
+    - image: >-
+        registry.redhat.io/rhel8/skopeo@sha256:e6b039a43b4ce0b8c0fb52899b3d7c0652051f74ce6dfc4dba64f7e26d1287ce
+      name: skopeo-copy
+      resources: {}
+      script: >
+        # Function to copy multiple images.
+
+        #
+
+        copyimages() {
+          filename='$(workspaces.images-url.path)/url.txt'
+          while IFS= read line || [ -n "$line" ]
+          do
+            cmd=""
+            for url in $line
+            do
+              # echo $url
+              cmd="$cmd \
+                  $url"
+            done
+            skopeo copy $cmd --src-tls-verify=$(params.srcTLSverify) --dest-tls-verify=$(params.destTLSverify)
+            echo $cmd
+          done < "$filename"
+        }
+
+        #
+
+        # If single image is to be copied then, it can be passed through
+
+        # params in the taskrun.
+
+        if [ "$(params.srcImageURL)" != "" ] && [ "$(params.destImageURL)" != ""
+        ] ; then
+          skopeo --version
+          skopeo copy "$(params.srcImageURL)" "$(params.destImageURL)" --src-tls-verify=$(params.srcTLSverify) --dest-tls-verify=$(params.destTLSverify) 
+        else
+          # If file is provided as a configmap in the workspace then multiple images can be copied.
+          #
+          copyimages
+        fi
+  workspaces:
+    - name: images-url
