@@ -15,13 +15,13 @@ spec:
   - default: workshop
     name: APP_NAME
     type: string
-  - default: https://repository-git.apps.DOMAIN/gitea/quarkus-build-options.git
+  - default: https://repository-git.apps.REPLACEME/gitea/quarkus-build-options.git
     name: GIT_REPO
     type: string
   - default: master
     name: GIT_REVISION
     type: string
-  - default: quay-quay-quay.apps.DOMAIN/openshift_workshop-int/workshop
+  - default: quay-quay-quay.apps.REPLACEME/openshift_workshop-int/workshop
     name: IMAGE_NAME
     type: string
   - default: .
@@ -36,7 +36,7 @@ spec:
   - default: latest
     name: IMAGESTREAMTAG
     type: string
-  - default: quay-quay-quay.apps.DOMAIN
+  - default: quay-quay-quay.apps.REPLACEME
     name: QUAY_URL
     type: string
   tasks:
