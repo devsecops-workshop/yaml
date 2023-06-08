@@ -117,6 +117,10 @@ spec:
         docker://$(params.IMAGE)
 
       cat $(workspaces.source.path)/image-digest | tee /tekton/results/IMAGE_DIGEST
+    securityContext:
+      capabilities:
+        add:
+          - SETFCAP  
     volumeMounts:
     - mountPath: /var/lib/containers
       name: varlibcontainers
@@ -133,8 +137,9 @@ spec:
       #!/usr/bin/env bash
       oc tag --source=docker $(params.IMAGE) $(params.IMAGESTREAM):$(params.IMAGESTREAMTAG) --insecure
     securityContext:
-      runAsNonRoot: true
-      runAsUser: 65532
+      capabilities:
+        add:
+          - SETFCAP
   volumes:
   - emptyDir: {}
     name: varlibcontainers
