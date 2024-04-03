@@ -48,6 +48,8 @@ spec:
       value: $(params.GIT_REVISION)
     - name: deleteExisting
       value: "true"
+    - name: sslVerify
+      value: "false"  
     taskRef:
       kind: ClusterTask
       name: git-clone
